@@ -9,14 +9,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,7 +20,7 @@ public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;
 
-    @GetMapping("sum")
+    @GetMapping("/sum")
     @Operation(summary = "Get sum of all expenses")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Sum of all expenses")})
     public ResponseEntity<Long> getSumOfAllExpenses() {
@@ -68,5 +61,12 @@ public class ExpenseController {
     public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
         expenseService.deleteExpense(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("/search")
+    @Operation(summary = "Get expense by description")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "List of expense by description")})
+    public ResponseEntity<List<Expense>> getExpensesByDescription(@RequestParam(name = "description") String description) {
+        return ResponseEntity.status(HttpStatus.OK).body(expenseService.getExpensesByDescription(description));
     }
 }

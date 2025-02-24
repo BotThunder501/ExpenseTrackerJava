@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
-    List<Expense> findByDescriptionContaining(String description);
+    List<Expense> findByDescriptionContainingIgnoreCase(String description);
     List<Expense> findByAmount(Long amount);
     List<Expense> findByAmountBetween(Long minAmount, Long maxAmount);
     List<Expense> findByDateTime(OffsetDateTime dateTime);

@@ -59,7 +59,7 @@ public class ExpenseControllerTest extends AbstractApplicationTest {
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.description").value("Test Expense"));
 
-        List<Expense> expenses = expenseRepository.findByDescriptionContaining("Test Expense");
+        List<Expense> expenses = expenseRepository.findByDescriptionContainingIgnoreCase("Test Expense");
         Assertions.assertEquals(1, expenses.size());
     }
 
@@ -122,5 +122,23 @@ public class ExpenseControllerTest extends AbstractApplicationTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$").value(300));
+    }
+    
+    @Test
+    public void getExpensesByDescription_shouldReturn200WithListOfExpenses() throws Exception {
+        List<Expense> expenses = List.of(
+            createExpense("Test Expense", 100L),
+            createExpense("Test expense2", 200L),
+            createExpense("expenses3", 300L),
+            createExpense("expenses4", 400L)
+        );
+
+        expenseRepository.saveAll(expenses);
+
+        mockMvc.perform(get("/api/expenses/search?description=Test Expense"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$[0].description").value("Test Expense"))
+            .andExpect(jsonPath("$[1].description").value("Test Expense2"));
     }
 }

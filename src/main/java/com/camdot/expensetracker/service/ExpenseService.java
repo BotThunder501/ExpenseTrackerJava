@@ -50,4 +50,8 @@ public class ExpenseService {
         }
         return total;
     }
+    
+    public List<Expense> getExpensesByDescription(String description) {
+        return expenseRepository.findByDescriptionContainingIgnoreCase(description);
+    }
 }
