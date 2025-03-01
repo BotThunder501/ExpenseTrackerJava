@@ -3,6 +3,7 @@ package com.camdot.expensetracker.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
+import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +26,10 @@ public class Expense {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private OffsetDateTime dateTime;
+
+    @ManyToOne
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
 
     public Expense() {
     }
@@ -65,5 +70,13 @@ public class Expense {
 
     public void setDateTime(OffsetDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
     }
 }
